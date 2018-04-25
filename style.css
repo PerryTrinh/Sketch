@@ -16,11 +16,10 @@ html, body {
 }
 
 #menuBar {
-	height: 25vh;
-	width: 5%;
+	height: 160px;
+	width: 63px;
 	top: 35vh;
 	right: 2%;
-	border-radius: 5%;
 	border: 2px solid gray;
 	background: #C0C0C0;
 	z-index: 10;
