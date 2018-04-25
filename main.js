@@ -1,7 +1,7 @@
 var sketch, ctx; //To be initialized when creating canvas
 var prevX, prevY; //To make continuous line when mousekey is held down
 var mouseDown = 0; //Keeping track of when mousekey is pressed/held down
-var drawSize = 3; //Size of pencil
+var drawSize = 1; //Size of pencil
 
 //Set up canvas dimensions and event listeners
 function createCanvas() {
