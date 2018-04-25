@@ -1,7 +1,10 @@
-var sketch, ctx; //To be initialized when creating canvas
+//TODO: add eraser and pencil functionality
+
+var sketch, ctx, eraser, pencil; //To be initialized when creating canvas
 var prevX, prevY; //To make continuous line when mousekey is held down
 var mouseDown = 0; //Keeping track of when mousekey is pressed/held down
 var drawSize = 1; //Size of pencil
+var color = "#000000";
 
 //Set up canvas dimensions and event listeners
 function createCanvas() {
@@ -12,6 +15,12 @@ function createCanvas() {
 	sketch.addEventListener("mousedown", onDown, false);
 	sketch.addEventListener("mousemove", onMove, false);
 	sketch.addEventListener("mouseup", onUp, false);
+
+	eraser = document.getElementById("Eraser");
+	eraser.addEventListener("click", toErase);
+
+	pencil = document.getElementById("Pencil");
+	pencil.addEventListener("click", toPencil);
 }
 
 function onDown(event) {
@@ -42,6 +51,7 @@ function draw(event) {
 	if (prevX != 0 && prevY != 0) {
 		if (x != prevX || y != prevY) {
 			ctx.beginPath();
+			ctx.strokeStyle = color;
 			ctx.lineWidth = drawSize * 2; //Line width too small, 2x is magic #?
 			ctx.moveTo(prevX, prevY);
 			ctx.lineTo(x, y);
@@ -49,6 +59,7 @@ function draw(event) {
 		}
 	}
 
+	ctx.fillStyle = color;
 	ctx.beginPath();
 	ctx.arc(x, y, drawSize, 0, Math.PI * 2, 0);
 	ctx.closePath();
@@ -68,3 +79,12 @@ function getMousePosition(sketch, event) {
 	};
 }
 
+function toErase() {
+	color = "#FFFFFF";
+	drawSize = 10;
+}
+
+function toPencil() {
+	color = "#000000";
+	drawSize = 1;
+}

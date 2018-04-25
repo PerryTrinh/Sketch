@@ -16,7 +16,7 @@ html, body {
 }
 
 #menuBar {
-	height: 16vh;
+	height: 18vh;
 	width: 5%;
 	top: 35vh;
 	right: 2%;
@@ -32,5 +32,7 @@ ul {
 }
 
 li {
-	margin: 5px 5px 20px 5px;
+	padding: 5px;
+	margin: 0px 0px 20px 0px;
+	/*border: 1px solid red;*/
 }
