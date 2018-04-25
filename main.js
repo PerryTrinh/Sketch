@@ -96,25 +96,21 @@ function toErase(event) {
 	color = "#FFFFFF";
 	drawSize = 30;
 	changeSelected(event.srcElement);
-	/*selectedType.style.background = menuBarBackground;
-	selectedType = eraser;
-	selectedType.style.background = selectedColor;*/
 }
 
-function toPencil(event) {
+function toPencil(event, usePencil=0) {
 	color = "#000000";
 	drawSize = 1;
-	changeSelected(event.srcElement);
-	/*selectedType.style.background = menuBarBackground;
-	selectedType = pencil;
-	selectedType.style.background = selectedColor;*/
+	//If usePencil, event is clicking clear so need to handle case
+	if (usePencil == 1) {
+		changeSelected(pencil);
+	} else {
+		changeSelected(event.srcElement);
+	}
 }
 
 function clearCanvas(event) {
 	ctx.clearRect(0, 0, sketch.width, sketch.height);
-	changeSelected(pencil); //After a canvas clear, default to pencil
-	/*selectedType.style.background = menuBarBackground;
-	selectedType = pencil;
-	selectedType.style.background = selectedColor;*/
+	toPencil(event, 1); //After a canvas clear, default to pencil
 }
 
