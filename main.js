@@ -1,6 +1,9 @@
-var sketch, ctx;
-var mouseDown = 0;
+var sketch, ctx; //To be initialized when creating canvas
+var prevX, prevY; //To make continuous line when mousekey is held down
+var mouseDown = 0; //Keeping track of when mousekey is pressed/held down
+var drawSize = 3; //Size of pencil
 
+//Set up canvas dimensions and event listeners
 function createCanvas() {
 	sketch = document.getElementById("sketch");
 	ctx = sketch.getContext("2d");
@@ -24,14 +27,34 @@ function onMove(event) {
 
 function onUp() {
 	mouseDown = 0;
+	//Reset prevX and prevY so that end point of this mousedown will not connect with start point of next mousedown
+	prevX = 0;
+	prevY = 0;
 }
 
 function draw(event) {
 	var position = getMousePosition(sketch, event);
-	
+	var x = position.x, y = position.y;
+
+	/* Meant to connect the draw dots if user moves cursor faster than draw can "refresh"
+	 * Just draw a line between the previous point to the current cursor point 
+	 */
+	if (prevX != 0 && prevY != 0) {
+		if (x != prevX || y != prevY) {
+			ctx.beginPath();
+			ctx.lineWidth = drawSize * 2; //Line width too small, 2x is magic #?
+			ctx.moveTo(prevX, prevY);
+			ctx.lineTo(x, y);
+			ctx.stroke(); //stroke vs fill to connect
+		}
+	}
+
 	ctx.beginPath();
-	ctx.arc(position.x, position.y, 3, 0, Math.PI * 2, 0);
+	ctx.arc(x, y, drawSize, 0, Math.PI * 2, 0);
+	ctx.closePath();
 	ctx.fill();
+	prevX = x;
+	prevY = y;
 }
 
 function getMousePosition(sketch, event) {
