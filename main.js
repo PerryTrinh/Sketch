@@ -1,4 +1,5 @@
 var sketch, ctx, eraser, pencil, clear, selectedType, menuBarBackground; //To be initialized when creating canvas
+var tempSketch, tempCtx; //Copies of sketch to save during window resizes
 var prevX, prevY; //To make continuous line when mousekey is held down
 var mouseDown = false; //Keeping track of when mousekey is pressed/held down
 var drawSize = 1; //Size of pencil
@@ -15,6 +16,11 @@ function createCanvas() {
 	sketch.addEventListener("mousedown", onDown, false);
 	sketch.addEventListener("mousemove", onMove, false);
 	sketch.addEventListener("mouseup", onUp, false);
+
+	tempSketch = document.createElement("canvas");
+	tempCtx = tempSketch.getContext("2d");
+	tempCtx.canvas.width = ctx.canvas.width;
+	tempCtx.canvas.height = ctx.canvas.height;
 
 	pencil = document.getElementById("Pencil");
 	pencil.style.background = selectedColor; 
@@ -33,16 +39,17 @@ function createCanvas() {
 
 //For when user resizes browser, need to preserve prior sketchings
 function resizeCanvas() {
-	//Create a copy of current sketch
-	var tempSketch = document.createElement("canvas");
-	var tempCtx = tempSketch.getContext("2d");
-	tempCtx.canvas.width = ctx.canvas.width;
-	tempCtx.canvas.height = ctx.canvas.height;
+	//Create a copy of current sketch onto tempCtx
 	tempCtx.drawImage(sketch, 0, 0);
 
-	//Resize current sketch (which will erase sketch) and then draw the copy
-	ctx.canvas.width = window.innerWidth;
-	ctx.canvas.height = window.innerHeight;
+	//If resize is stretching in a given direction, resize sketch
+	if (window.innerWidth > ctx.canvas.width) {
+		ctx.canvas.width = window.innerWidth;
+	}
+
+	if (window.innerHeight > ctx.canvas.height) {
+		ctx.canvas.height = window.innerHeight;
+	}
 	ctx.drawImage(tempSketch, 0, 0);
 }
 
