@@ -134,6 +134,7 @@ function toPencil(event, usePencil=0) {
 
 function clearCanvas(event) {
 	ctx.clearRect(0, 0, sketch.width, sketch.height);
+	tempCtx.clearRect(0, 0, tempSketch.width, tempSketch.height);
 	toPencil(event, 1); //After a canvas clear, default to pencil
 }
 
