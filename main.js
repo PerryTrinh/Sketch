@@ -32,8 +32,17 @@ function createCanvas() {
 }
 
 function resizeCanvas() {
+	//Create a copy of current canvas
+	var tempSketch = document.createElement("canvas");
+	var tempCtx = tempSketch.getContext("2d");
+	tempCtx.canvas.width = ctx.canvas.width;
+	tempCtx.canvas.height = ctx.canvas.height;
+	tempCtx.drawImage(sketch, 0, 0);
+
+	//Resize current canvas and "load" in copy to real canvas
 	ctx.canvas.width = window.innerWidth;
-	cts.canvas.height = window.innerHeight;
+	ctx.canvas.height = window.innerHeight;
+	ctx.drawImage(tempSketch, 0, 0);
 }
 
 function onDown(event) {
