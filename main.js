@@ -1,6 +1,6 @@
 var sketch, ctx, eraser, pencil, clear, selectedType, menuBarBackground; //To be initialized when creating canvas
 var prevX, prevY; //To make continuous line when mousekey is held down
-var mouseDown = 0; //Keeping track of when mousekey is pressed/held down
+var mouseDown = false; //Keeping track of when mousekey is pressed/held down
 var drawSize = 1; //Size of pencil
 var color = "#000000"; //Default state = draw
 var selectedColor = "#F0F0F0";
@@ -31,33 +31,34 @@ function createCanvas() {
 	menuBarBackground = document.getElementById("menuBar").style.background;
 }
 
+//For when user resizes browser, need to preserve prior sketchings
 function resizeCanvas() {
-	//Create a copy of current canvas
+	//Create a copy of current sketch
 	var tempSketch = document.createElement("canvas");
 	var tempCtx = tempSketch.getContext("2d");
 	tempCtx.canvas.width = ctx.canvas.width;
 	tempCtx.canvas.height = ctx.canvas.height;
 	tempCtx.drawImage(sketch, 0, 0);
 
-	//Resize current canvas and "load" in copy to real canvas
+	//Resize current sketch (which will erase sketch) and then draw the copy
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
 	ctx.drawImage(tempSketch, 0, 0);
 }
 
 function onDown(event) {
-	mouseDown = 1;
+	mouseDown = true;
 	draw(event);
 }
 
 function onMove(event) {
-	if (mouseDown == 1) {
+	if (mouseDown) {
 		draw(event);
 	}
 }
 
 function onUp() {
-	mouseDown = 0;
+	mouseDown = false;
 	//Reset prevX and prevY so that end point of this mousedown will not connect with start point of next mousedown
 	prevX = 0;
 	prevY = 0;
@@ -67,17 +68,17 @@ function draw(event) {
 	var position = getMousePosition(sketch, event);
 	var x = position.x, y = position.y;
 
-	/* Meant to connect the draw dots if user moves cursor faster than draw can "refresh"
-	 * Just draw a line between the previous point to the current cursor point 
+	/* Meant to connect the draw dots as dots only refresh at a certain rate
+	 * Just draws a line between draw dots to appear as if it is continuous
 	 */
 	if (prevX != 0 && prevY != 0) {
 		if (x != prevX || y != prevY) {
 			ctx.beginPath();
 			ctx.strokeStyle = color;
-			ctx.lineWidth = drawSize * 2; //Line width too small, 2x is magic #?
+			ctx.lineWidth = drawSize * 2; //Line width too small w/ just drawSize, 2x is magic #?
 			ctx.moveTo(prevX, prevY);
 			ctx.lineTo(x, y);
-			ctx.stroke(); //stroke vs fill to connect
+			ctx.stroke(); //Use .stroke() not .fill() to connect
 		}
 	}
 
