@@ -7,6 +7,7 @@ var selectedColor = "#F0F0F0";
 
 //Set up canvas dimensions and event listeners
 function createCanvas() {
+	window.addEventListener("resize", resizeCanvas);
 	sketch = document.getElementById("sketch");
 	ctx = sketch.getContext("2d");
 	ctx.canvas.width = window.innerWidth;
@@ -28,6 +29,11 @@ function createCanvas() {
 	clear.addEventListener("click", clearCanvas);
 
 	menuBarBackground = document.getElementById("menuBar").style.background;
+}
+
+function resizeCanvas() {
+	ctx.canvas.width = window.innerWidth;
+	cts.canvas.height = window.innerHeight;
 }
 
 function onDown(event) {
